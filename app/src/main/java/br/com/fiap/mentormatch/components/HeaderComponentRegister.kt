@@ -1,0 +1,60 @@
+package br.com.fiap.mentormatch.components
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import br.com.fiap.mentormatch.R
+import kotlinx.coroutines.launch
+
+@Composable
+fun HeaderComponentRegister() {
+
+    val poppyns = FontFamily(
+        Font(R.font.poppins_regular)
+    )
+    Box(contentAlignment = Alignment.CenterStart) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ){
+                Text(
+                    text = "MentorMatch",
+                    color = colorResource(id = R.color.logo),
+                    fontFamily = poppyns,
+                    fontSize = 18.sp
+                )
+            }
+        }
+    }
+
+}
