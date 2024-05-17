@@ -22,7 +22,7 @@ fun TitleComponent (
 
     Card () {
         Text(
-            text = title,
+                text = title,
             color = colorResource(id = colorText),
             fontFamily = poppyns,
             fontSize = nameProfileFontSize,

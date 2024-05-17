@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -41,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -84,5 +85,17 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.6.1")
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
 
+    implementation("androidx.room:room-ktx:2.5.0")
+    implementation("com.google.firebase:firebase-analytics:21.3.0")
+    implementation("com.google.firebase:firebase-messaging:23.2.1")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
+    implementation ("com.google.firebase:firebase-inappmessaging:20.3.5")
+    implementation ("com.google.firebase:firebase-inappmessaging-ktx:20.3.5")
+    implementation ("com.google.firebase:firebase-inappmessaging-display:20.3.5")
+    implementation ("com.google.firebase:firebase-inappmessaging-display-ktx:20.3.5")
+
+
     kapt ("androidx.room:room-compiler:2.6.1")
+
+
 }

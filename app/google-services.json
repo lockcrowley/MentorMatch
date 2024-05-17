@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "743251420447",
+    "project_id": "mentormatch-469a6",
+    "storage_bucket": "mentormatch-469a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743251420447:android:81f3212bffaafe12e3fc2a",
+        "android_client_info": {
+          "package_name": "br.com.fiap.mentormatch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJZKD-HcErdacW59RfUaQXkoAbE0byR4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
