@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.fiap.mentormatch.navigator.NavigationController
 import br.com.fiap.mentormatch.ui.theme.MentorMatchTheme
+import br.com.fiap.mentormatch.utils.NotificationUtils
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    NotificationUtils.showNotification(this, "Bem vindo ao MentorMatch", "Aqui você pode se conectar com vários mentores e alunos, conversar, aprneder e fazer um ótimo network.")
                     NavigationController()
                 }
             }
