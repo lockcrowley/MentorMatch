@@ -40,7 +40,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.navigation.NavController
 import br.com.fiap.mentormatch.components.ProfileImageComponent
 import br.com.fiap.mentormatch.components.TitleComponent
-import br.com.fiap.mentormatch.database.repository.UserRepository
 import br.com.fiap.mentormatch.repository.getAllUsers
 import br.com.fiap.mentormatch.repository.getAllUsersBySearch
 
@@ -57,9 +56,6 @@ fun ListUsersScreen (navigationController: NavController) {
     val poppyns = FontFamily(
         Font(font.poppins_regular)
     )
-
-    val context = LocalContext.current
-    val userRepository = UserRepository(context)
 
     Column (
         modifier = Modifier.padding(top = 60.dp),
@@ -126,14 +122,24 @@ fun ListUsersScreen (navigationController: NavController) {
                     modifier = Modifier
                         .offset(x = (60).dp)
                 ) {
-                    items(getAllUsers().chunked(2)) {
+                    items(listUsers.chunked(2)) {
                         Row (horizontalArrangement = Arrangement.SpaceAround) {
                             for (user in it) {
+                                var colorStatusToContacts by remember {
+                                    mutableStateOf(color.green_light)
+                                }
+
+                                if (user.availability == "Ausente") {
+                                    colorStatusToContacts = color.orange
+                                } else if (user.availability == "Offline") {
+                                    colorStatusToContacts = color.gray_title
+                                }
+
                                 ProfileImageComponent(
                                     imageProfile = user.imageUser,
                                     description = user.name,
                                     sizeImage = 70.dp,
-                                    imageBorderColor = color.green_light,
+                                    imageBorderColor = colorStatusToContacts,
                                     borderWidth = 2.dp,
                                     nameProfile = user.name,
                                     nameProfileFontSize = 12.sp,

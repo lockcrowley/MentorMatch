@@ -1,5 +1,6 @@
 package br.com.fiap.mentormatch.screens.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,12 +18,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,18 +47,45 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.mentormatch.R.*
 import br.com.fiap.mentormatch.components.ProfileImageComponent
 import br.com.fiap.mentormatch.database.repository.UserRepository
-import br.com.fiap.mentormatch.repository.getAllUsers
+import br.com.fiap.mentormatch.model.Users
 import br.com.fiap.mentormatch.repository.getAllUsersBySearchId
 
 @Composable
-
 fun ProfileUsersScreen(userId: Long) {
     val poppyns = FontFamily(
         Font(font.poppins_regular)
     )
 
+    val context = LocalContext.current
+    val userRepository = UserRepository(context)
+    val userLogged = userRepository.findUserById(1)
     val userById = getAllUsersBySearchId(userId)
 
+    val currentContacts: List<Users> = userLogged.contacts
+
+    val userToAdd = listOf(
+        Users(
+            id = userById!!.id,
+            name = userById.name,
+            locale = userById.locale,
+            experiencies = userById.experiencies,
+            skills = userById.skills,
+            phone = userById.phone,
+            job = userById.job,
+            imageUser = userById.imageUser,
+            isMentor = userById.isMentor
+        )
+    )
+
+    val updatedContacts: List<Users> = currentContacts + userToAdd
+
+    var userContactExist = userLogged.contacts.find {
+        it.id === userId
+    }
+
+    var isContactListEmpty = userContactExist == null
+
+    val contactToRemove: List<Users> = currentContacts.filter { it.id != userId }
 
     var userIsMentor by remember {
         mutableStateOf("")
@@ -65,6 +97,16 @@ fun ProfileUsersScreen(userId: Long) {
         userIsMentor = "Aluno"
     }
 
+    var colorStatus by remember {
+        mutableStateOf(color.green_light)
+    }
+
+    if (userById.availability == "Ausente") {
+        colorStatus = color.orange
+    } else if (userById.availability == "Offline") {
+        colorStatus = color.gray_title
+    }
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -73,13 +115,14 @@ fun ProfileUsersScreen(userId: Long) {
 
         Box(modifier = Modifier
             .padding(20.dp)
+            .width(380.dp)
             .offset(y = (-10).dp)) {
             Row () {
                 ProfileImageComponent(
-                    imageProfile = drawable.avatar,
+                    imageProfile = userById.imageUser,
                     description = "User",
                     sizeImage = 100.dp,
-                    imageBorderColor = color.green_light,
+                    imageBorderColor = colorStatus,
                     borderWidth = 4.dp,
                     button = false,
                     nav = false,
@@ -111,10 +154,50 @@ fun ProfileUsersScreen(userId: Long) {
                     }
                 }
             }
+
+            IconButton(
+                onClick = {
+                    userContactExist = userLogged.contacts.find {
+                        it.id === userId
+                    }
+
+                    isContactListEmpty = userContactExist == null
+
+                    if (isContactListEmpty) {
+                        val updatedUser = userLogged.copy(
+                            contacts = updatedContacts
+                        )
+                        Toast.makeText(context, "$userIsMentor adicionado!!", Toast.LENGTH_SHORT).show()
+                        userRepository.update(updatedUser)
+                    } else {
+                        val updatedUser = userLogged.copy(
+                            contacts = contactToRemove
+                        )
+                        Toast.makeText(context, "$userIsMentor removido da lista de conexões!!", Toast.LENGTH_SHORT).show()
+                        userRepository.update(updatedUser)
+                    }
+
+                },
+                modifier = Modifier
+                    .offset(y = (75).dp, x = (280).dp)
+                    .width(95.dp)
+                    .height(50.dp)
+            ) {
+                Icon(
+                    imageVector = if(isContactListEmpty) Icons.Default.AddCircle else Icons.Default.Clear,
+                    contentDescription = "Menu Icon",
+                    tint = colorResource(id = color.green_light),
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(55.dp)
+                )
+            }
         }
         Column(
             modifier = Modifier
-                .offset(y = (-65).dp, x = (-55).dp)
+                .offset(y = (-65).dp)
+                .padding(horizontal = 20.dp)
+                .width(380.dp)
         ) {
             Row {
                 Icon(
@@ -258,14 +341,24 @@ fun ProfileUsersScreen(userId: Long) {
                 modifier = Modifier
                     .offset(y = (-40).dp, x = (18).dp)
             ) {
-                items(getAllUsers().chunked(3)) {
+                items(userById.contacts.chunked(3)) {
                     Row (horizontalArrangement = Arrangement.SpaceAround) {
                         for (user in it) {
+                            var colorStatusToContacts by remember {
+                                mutableStateOf(color.green_light)
+                            }
+
+                            if (user.availability == "Ausente") {
+                                colorStatusToContacts = color.orange
+                            } else if (user.availability == "Offline") {
+                                colorStatusToContacts = color.gray_title
+                            }
+
                             ProfileImageComponent(
                                 imageProfile = user.imageUser,
                                 description = user.name,
                                 sizeImage = 70.dp,
-                                imageBorderColor = color.green_light,
+                                imageBorderColor = colorStatusToContacts,
                                 borderWidth = 2.dp,
                                 nameProfile = user.name,
                                 nameProfileFontSize = 12.sp,

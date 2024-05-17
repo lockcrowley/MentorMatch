@@ -74,7 +74,7 @@ fun NavigationController () {
     }
 
     if (userById != null) {
-        initialScreen = "registeredUsers"
+        initialScreen = "ListUsersScreen"
     } else {
         initialScreen = "registeredUsers"
     }
@@ -178,7 +178,7 @@ fun NavigationController () {
                     selected = false,
                     icon = {
                         Icon(
-                            painter = painterResource(id = drawable.dog_resting_on_a_pet_hotel_bed_svgrepo_com),
+                            painter = painterResource(id = drawable.baseline_people_24),
                             contentDescription = "",
                             tint = colorResource(id = color.green_light),
                             modifier = Modifier
