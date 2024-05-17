@@ -1,5 +1,8 @@
 package br.com.fiap.mentormatch.screens.profile
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,12 +20,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -67,6 +73,16 @@ fun ProfileScreen() {
         userIsMentor = "Aluno"
     }
 
+    var colorStatus by remember {
+        mutableStateOf(color.green_light)
+    }
+
+    if (userById.availability == "Ausente") {
+        colorStatus = color.orange
+    } else if (userById.availability == "Offline") {
+        colorStatus = color.gray_title
+    }
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -75,13 +91,14 @@ fun ProfileScreen() {
 
         Box(modifier = Modifier
             .padding(20.dp)
+            .width(380.dp)
             .offset(y = (-10).dp)) {
             Row () {
                 ProfileImageComponent(
                     imageProfile = drawable.avatar,
                     description = "User",
                     sizeImage = 100.dp,
-                    imageBorderColor = color.green_light,
+                    imageBorderColor = colorStatus,
                     borderWidth = 4.dp,
                     button = false,
                     nav = false,
@@ -116,7 +133,9 @@ fun ProfileScreen() {
         }
         Column(
             modifier = Modifier
-                .offset(y = (-65).dp, x = (-55).dp)
+                .offset(y = (-65).dp)
+                .padding(horizontal = 20.dp)
+                .width(380.dp)
         ) {
             Row {
                 Icon(
@@ -260,14 +279,24 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .offset(y = (-40).dp, x = (18).dp)
             ) {
-                items(getAllUsers().chunked(3)) {
+                items(userById.contacts.chunked(3)) {
                     Row (horizontalArrangement = Arrangement.SpaceAround) {
                         for (user in it) {
+                            var colorStatusToContacts by remember {
+                                mutableStateOf(color.green_light)
+                            }
+
+                            if (user.availability == "Ausente") {
+                                colorStatusToContacts = color.orange
+                            } else if (user.availability == "Offline") {
+                                colorStatusToContacts = color.gray_title
+                            }
+
                             ProfileImageComponent(
                                 imageProfile = user.imageUser,
                                 description = user.name,
                                 sizeImage = 70.dp,
-                                imageBorderColor = color.green_light,
+                                imageBorderColor = colorStatusToContacts,
                                 borderWidth = 2.dp,
                                 nameProfile = user.name,
                                 nameProfileFontSize = 12.sp,

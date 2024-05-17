@@ -15,6 +15,8 @@ data class Users(
     var phone: String = "",
     var job: String = "",
     var locale: String = "",
+    var availability: String = "Disponivel",
     @ColumnInfo(name = "image_user") var imageUser: Int = drawable.avatar,
-    @ColumnInfo(name = "is_mentor") var isMentor: Boolean = false
+    @ColumnInfo(name = "is_mentor") var isMentor: Boolean = false,
+    @ColumnInfo(name = "contacts") var contacts: List<Users> = listOf()
 )
